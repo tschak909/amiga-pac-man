@@ -1,0 +1,11 @@
+lc1 -i:include/ -i:include/lattice/ DrawMaze
+if not exists "DrawMaze.q"
+    echo "Compile failed."
+    quit 20
+    endif
+lc2 -v DrawMaze.q
+atom DrawMaze.o DrawMaze.atom.o -pc -cdb
+alink FROM LIB:AStartup.obj+DrawMaze.atom.o TO DrawMaze LIBRARY LIB:amiga.lib+LIB:lc.lib FASTER
+delete DrawMaze.o
+delete DrawMaze.atom.o
+echo "-- Compile complete --"

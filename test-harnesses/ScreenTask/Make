@@ -1,0 +1,11 @@
+lc1 -i:include/ -i:include/lattice/ screenTask
+if not exists "screenTask.q"
+    echo "Compile failed."
+    quit 20
+    endif
+lc2 -v screenTask.q
+atom screenTask.o screenTask.atom.o -pc -cdb
+alink FROM LIB:AStartup.obj+screenTask.atom.o TO screenTask LIBRARY LIB:amiga.lib+LIB:lc.lib FASTER
+delete screenTask.o
+delete screenTask.atom.o
+echo "-- Compile complete --"

@@ -1,0 +1,11 @@
+lc1 -i:include/ -i:include/lattice/ DrawStage
+if not exists "DrawStage.q"
+    echo "Compile failed."
+    quit 20
+    endif
+lc2 -v DrawStage.q
+atom DrawStage.o DrawStage.atom.o -pc -cdb
+alink FROM LIB:AStartup.obj+DrawStage.atom.o TO DrawStage LIBRARY LIB:amiga.lib+LIB:lc.lib FASTER
+delete DrawStage.o
+delete DrawStage.atom.o
+echo "-- Compile complete --"
