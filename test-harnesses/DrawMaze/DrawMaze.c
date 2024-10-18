@@ -819,7 +819,7 @@ main()
 	if (!sPacMan)
 		goto bye;
 
-	LoadRGB4(&sPacMan->ViewPort, colorTable, sizeof(colorTable));
+	LoadRGB4(&sPacMan->ViewPort, colorTable, 16);
 
 	nwPacMan.Screen = sPacMan;
 	wPacMan = OpenWindow(&nwPacMan);
@@ -829,8 +829,6 @@ main()
 	SetRast(wPacMan->RPort,0);
 
 	DrawBorder(wPacMan->RPort,&boMaze,0,7);
-
-	about();
 	
 	Delay(600);
 

@@ -1,0 +1,11 @@
+lc1 -i:include/ -i:include/lattice/ SpritePac
+if not exists "SpritePac.q"
+    echo "Compile failed."
+    quit 20
+    endif
+lc2 -v SpritePac.q
+atom SpritePac.o SpritePac.atom.o -pc -cdb
+alink FROM LIB:AStartup.obj+SpritePac.atom.o TO SpritePac LIBRARY LIB:amiga.lib+LIB:lc.lib FASTER
+delete SpritePac.o
+delete SpritePac.atom.o
+echo "-- Compile complete --"

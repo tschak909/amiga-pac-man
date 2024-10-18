@@ -1,6 +1,6 @@
 /**
- * @brief   Draw Round
- * @verbose Draw Round graphic
+ * @brief   Draw Round bitplanes
+ * @verbose Demonstrate how bitplanes work
  * @author  Thomas Cherryhomes
  * @email   thom dot cherryhomes at gmail dot com
  * @license GPL v. 3, see LICENSE for details.
@@ -11,6 +11,7 @@
 #include <exec/exec.h>
 #include <graphics/gfx.h>
 #include <graphics/gfxbase.h>
+#include <graphics/gfxmacros.h>
 #include <intuition/intuition.h>
 
 #include "font.h"
@@ -34,20 +35,20 @@ struct NewScreen nsPacMan =
 	NULL,
 	CUSTOMSCREEN,
 	NULL,
-	"PAC-MAN(tm)",
+	"HOW BITPLANES WORK",
 	NULL
 };
 
 struct NewWindow nwPacMan = 
 {
-	0, 0,
-	320, 200,
+	0, 12,
+	320, 188,
 	0, 1,
+	CLOSEWINDOW,
+	ACTIVATE|WINDOWCLOSE,
 	NULL,
-	ACTIVATE|BORDERLESS|BACKDROP,
 	NULL,
-	NULL,
-	"PAC-MAN(tm)",
+	"PRESS TO CLOSE",
 	NULL,
 	NULL,
 	320,200,320,200,
@@ -744,228 +745,102 @@ struct Image iCherry =
 	NULL
 };
 
-/* All stage images on the same Y coordinate. */
-#define STAGEY 176
-
-/* The X positions for each of the 7 stage images left to right. */
-SHORT stageX[7] = 
+drawPlanes(img,y)
+struct Image *img;
+SHORT y;
 {
-	192,208,224,240,256,272,288
-};
+	SHORT oldDepth, oldPlanePick;
+	UWORD *oldImageData;
 
-/**
- * @brief Draw the stage fruits, given a stage number.
- * @param stage #
- */
-drawStage(stage)
-int stage;
-{
-	int i=0;
-	struct Image *img[7];
+	oldDepth = img->Depth;
+	oldPlanePick = img->PlanePick;
+	oldImageData = img->ImageData;
 
-	/* Exit if no window rastport */
-	if (!wPacMan->RPort)
-		return FALSE;
-
-	/* Clear pointers to struct Images */
-	for (i=0;i<7;i++)
-		img[i] = NULL;
-
-	/* Clear the stage fruit area */
-	SetAPen(wPacMan->RPort,0);
-	RectFill(wPacMan->RPort,stageX[6],STAGEY,stageX[0]+16,STAGEY+16);
-
-	/* Set up pointers to images */
-	switch(stage)
+	if (oldPlanePick & 0x01)
 	{
-		case 1:
-			img[0]=&iEmpty;
-			img[1]=&iEmpty;
-			img[2]=&iEmpty;
-			img[3]=&iEmpty;
-			img[4]=&iEmpty;
-			img[5]=&iEmpty;
-			img[6]=&iCherry;
-			break;
-		case 2:
-			img[0]=&iEmpty;
-			img[1]=&iEmpty;
-			img[2]=&iEmpty;
-			img[3]=&iEmpty;
-			img[4]=&iEmpty;
-			img[5]=&iStrawberry;
-			img[6]=&iCherry;
-			break;
-		case 3:
-			img[0]=&iEmpty;
-			img[1]=&iEmpty;
-			img[2]=&iEmpty;
-			img[3]=&iEmpty;
-			img[4]=&iOrange;
-			img[5]=&iStrawberry;
-			img[6]=&iCherry;
-			break;
-		case 4:
-			img[0]=&iEmpty;
-			img[1]=&iEmpty;
-			img[2]=&iEmpty;
-			img[3]=&iOrange;
-			img[4]=&iOrange;
-			img[5]=&iStrawberry;
-			img[6]=&iCherry;
-			break;
-		case 5:
-			img[0]=&iEmpty;
-			img[1]=&iEmpty;
-			img[2]=&iApple;
-			img[3]=&iOrange;
-			img[4]=&iOrange;
-			img[5]=&iStrawberry;
-			img[6]=&iCherry;
-			break;
-		case 6:
-			img[0]=&iEmpty;
-			img[1]=&iApple;
-			img[2]=&iApple;
-			img[3]=&iOrange;
-			img[4]=&iOrange;
-			img[5]=&iStrawberry;
-			img[6]=&iCherry;
-			break;
-		case 7:
-			img[0]=&iMelon;
-			img[1]=&iApple;
-			img[2]=&iApple;
-			img[3]=&iOrange;
-			img[4]=&iOrange;
-			img[5]=&iStrawberry;
-			img[6]=&iCherry;
-			break;
-		case 8:
-			img[0]=&iMelon;
-			img[1]=&iMelon;
-			img[2]=&iApple;
-			img[3]=&iApple;
-			img[4]=&iOrange;
-			img[5]=&iOrange;
-			img[6]=&iStrawberry;
-			break;
-		case 9:
-			img[0]=&iGalaxian;
-			img[1]=&iMelon;
-			img[2]=&iMelon;
-			img[3]=&iApple;
-			img[4]=&iApple;
-			img[5]=&iOrange;
-			img[6]=&iOrange;
-			break;
-		case 10:
-			img[0]=&iGalaxian;
-			img[1]=&iGalaxian;
-			img[2]=&iMelon;
-			img[3]=&iMelon;
-			img[4]=&iApple;
-			img[5]=&iApple;
-			img[6]=&iOrange;
-			break;
-		case 11:
-			img[0]=&iBell;
-			img[1]=&iGalaxian;
-			img[2]=&iGalaxian;
-			img[3]=&iMelon;
-			img[4]=&iMelon;
-			img[5]=&iApple;
-			img[6]=&iApple;
-			break;
-		case 12:
-			img[0]=&iBell;
-			img[1]=&iBell;
-			img[2]=&iGalaxian;
-			img[3]=&iGalaxian;
-			img[4]=&iMelon;
-			img[5]=&iMelon;
-			img[6]=&iApple;
-			break;
-		case 13:
-			img[0]=&iKey;
-			img[1]=&iBell;
-			img[2]=&iBell;
-			img[3]=&iGalaxian;
-			img[4]=&iGalaxian;
-			img[5]=&iMelon;
-			img[6]=&iMelon;
-			break;
-		case 14:
-			img[0]=&iKey;
-			img[1]=&iKey;
-			img[2]=&iBell;
-			img[3]=&iBell;
-			img[4]=&iGalaxian;
-			img[5]=&iGalaxian;
-			img[6]=&iMelon;
-			break;
-		case 15:
-			img[0]=&iKey;
-			img[1]=&iKey;
-			img[2]=&iKey;
-			img[3]=&iBell;
-			img[4]=&iBell;
-			img[5]=&iGalaxian;
-			img[6]=&iGalaxian;
-			break;
-		case 16:
-			img[0]=&iKey;
-			img[1]=&iKey;
-			img[2]=&iKey;
-			img[3]=&iKey;
-			img[4]=&iBell;
-			img[5]=&iBell;
-			img[6]=&iGalaxian;
-			break;
-		case 17:
-			img[0]=&iKey;
-			img[1]=&iKey;
-			img[2]=&iKey;
-			img[3]=&iKey;
-			img[4]=&iKey;
-			img[5]=&iBell;
-			img[6]=&iBell;
-			break;
-		case 18:
-			img[0]=&iKey;
-			img[1]=&iKey;
-			img[2]=&iKey;
-			img[3]=&iKey;
-			img[4]=&iKey;
-			img[5]=&iKey;
-			img[6]=&iBell;
-			break;
-		default:
-			img[0]=&iKey;
-			img[1]=&iKey;
-			img[2]=&iKey;
-			img[3]=&iKey;
-			img[4]=&iKey;
-			img[5]=&iKey;
-			img[6]=&iKey;
-			break;
+		img->Depth = 1;
+		img->PlanePick = 0x1;
+		DrawImage(wPacMan->RPort,img,32,y);
+		img->ImageData += 16;
 	}
 
-	/* And ask Intuition to draw em! */
-	for (i=0;i<7;i++)
-		DrawImage(wPacMan->RPort,img[i],stageX[i],STAGEY);
+	if (oldPlanePick & 0x02)
+	{
+		img->PlanePick = 0x02;
+		DrawImage(wPacMan->RPort,img,64,y);
+		img->ImageData += 16;
+	}
 
-	return TRUE;
+	if (oldPlanePick & 0x04)
+	{
+		img->PlanePick = 0x04;
+		DrawImage(wPacMan->RPort,img,96,y);
+		img->ImageData += 16;
+	}
+
+	if (oldPlanePick & 0x08)
+	{
+		img->PlanePick = 0x08;
+		DrawImage(wPacMan->RPort,img,128,y);
+		img->ImageData += 16;
+	}
+
+	img->Depth = oldDepth;
+	img->PlanePick = oldPlanePick;
+	img->ImageData = oldImageData;
+	DrawImage(wPacMan->RPort,img,160,y);
 }
 
-/**
- * The test harness, display 24 stage iterations
- * Accompanied by delay
- */
-main()
+char *colorLegend="0123456789ABCDEF";
+
+drawColors()
 {
 	int i;
 
+	SetOPen(wPacMan->RPort, 0); /* Black border around color chips */
+
+	for (i=0;i<16;i++)
+	{
+		SetAPen(wPacMan->RPort,i);
+		RectFill(wPacMan->RPort,312-16,(i<<3)+12,320-16,((i<<3)+8)+12);
+		Move(wPacMan->RPort,300-16,(i<<3)+12+7);
+		Text(wPacMan->RPort,colorLegend++,1);
+	}
+
+}
+
+#define LEGEND_Y 160
+
+drawLegends()
+{
+	SetAPen(wPacMan->RPort,0x0F);
+
+	Move(wPacMan->RPort,32,LEGEND_Y);
+	Text(wPacMan->RPort,"0",1);
+	Move(wPacMan->RPort,64,LEGEND_Y);
+	Text(wPacMan->RPort,"1",1);
+	Move(wPacMan->RPort,96,LEGEND_Y);
+	Text(wPacMan->RPort,"2",1);
+	Move(wPacMan->RPort,128,LEGEND_Y);
+	Text(wPacMan->RPort,"3",1);
+	Move(wPacMan->RPort,160,LEGEND_Y);
+	Text(wPacMan->RPort,"ALL",3);
+
+	Move(wPacMan->RPort,32,LEGEND_Y+8);
+	Text(wPacMan->RPort,"1",1);
+	Move(wPacMan->RPort,64,LEGEND_Y+8);
+	Text(wPacMan->RPort,"2",1);
+	Move(wPacMan->RPort,96,LEGEND_Y+8);
+	Text(wPacMan->RPort,"4",1);
+	Move(wPacMan->RPort,128,LEGEND_Y+8);
+	Text(wPacMan->RPort,"8",1);
+}
+
+/**
+ * The test harness.
+ */
+main()
+{
 	GfxBase = (struct GfxBase *)
 		OpenLibrary("graphics.library",0);
 
@@ -987,24 +862,35 @@ main()
 	if (!sPacMan)
 		goto bye;
 
+	/* Load playfield color palette */
+	LoadRGB4(&sPacMan->ViewPort, colorTable, 16);
+
+	/* Set our mouse (sprite 0 colors) */
+	SetRGB4(&sPacMan->ViewPort,0x11,0x07,0x07,0x00);
+	SetRGB4(&sPacMan->ViewPort,0x13,0x0F,0x0F,0x00);
+
 	nwPacMan.Screen = sPacMan;
 	wPacMan = OpenWindow(&nwPacMan);
 	if (!wPacMan)
 		goto bye;
 
-	LoadRGB4(&sPacMan->ViewPort,colorTable,16);
+	drawColors();
+	drawLegends();
 
-	for (i=1;i<24;i++)
-	{
-		drawStage(i);
-		Delay(100);
-	}
-
-	Delay(600);
+	drawPlanes(&iCherry,32);
+	drawPlanes(&iOrange,48);
+	drawPlanes(&iApple,64);
+	drawPlanes(&iMelon,80);
+	drawPlanes(&iGalaxian,96);
+	drawPlanes(&iBell,112);
+	drawPlanes(&iKey,128);
+	
+	Wait(1<<wPacMan->UserPort->mp_SigBit);
 
 bye:
 	RemFont(&Arcade8Font);
 
+	/* Intuition will drain the message port for us. */
 	if (wPacMan)
 		CloseWindow(wPacMan);
 

@@ -1,0 +1,11 @@
+lc1 -i:include/ -i:include/lattice/ Planes
+if not exists "Planes.q"
+    echo "Compile failed."
+    quit 20
+    endif
+lc2 -v Planes.q
+atom Planes.o Planes.atom.o -pc -cdb
+alink FROM LIB:AStartup.obj+Planes.atom.o TO Planes LIBRARY LIB:amiga.lib+LIB:lc.lib FASTER
+delete Planes.o
+delete Planes.atom.o
+echo "-- Compile complete --"
