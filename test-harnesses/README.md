@@ -14,3 +14,16 @@ Drawing the maze using a set of Intuition Border objects.
 
 Drawing the stage fruits using Intuition Image objects.
 
+* Planes
+
+A tutorial chart showing how bit-plane graphics work.
+
+* SpritePac
+
+Showing PAC-MAN being animated with ROM Simple Sprites.
+
+* PacAndMaze
+
+A quick test to show that Paccy fits just fine in 200 lines.
+
+
