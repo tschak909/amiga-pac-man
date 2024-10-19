@@ -1,0 +1,11 @@
+lc1 -i:include/ -i:include/lattice/ PacAndMaze
+if not exists "PacAndMaze.q"
+    echo "Compile failed."
+    quit 20
+    endif
+lc2 -v PacAndMaze.q
+atom PacAndMaze.o PacAndMaze.atom.o -pc -cdb
+alink FROM LIB:AStartup.obj+PacAndMaze.atom.o TO PacAndMaze LIBRARY LIB:amiga.lib+LIB:lc.lib FASTER
+delete PacAndMaze.o
+delete PacAndMaze.atom.o
+echo "-- Compile complete --"
