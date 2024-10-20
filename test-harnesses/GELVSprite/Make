@@ -1,0 +1,11 @@
+lc1 -i:include/ -i:include/lattice/ GELVSprite
+if not exists "GELVSprite.q"
+    echo "Compile failed."
+    quit 20
+    endif
+lc2 -v GELVSprite.q
+atom GELVSprite.o GELVSprite.atom.o -pc -cdb
+alink FROM LIB:AStartup.obj+GELVSprite.atom.o TO GELVSprite LIBRARY LIB:amiga.lib+LIB:lc.lib FASTER
+delete GELVSprite.o
+delete GELVSprite.atom.o
+echo "-- Compile complete --"
