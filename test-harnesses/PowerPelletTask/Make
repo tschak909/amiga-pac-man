@@ -1,0 +1,11 @@
+lc1 -i:include/ -i:include/lattice/ PowerPelletTask
+if not exists "PowerPelletTask.q"
+    echo "Compile failed."
+    quit 20
+    endif
+lc2 -v PowerPelletTask.q
+atom PowerPelletTask.o PowerPelletTask.atom.o -pc -cdb
+alink FROM LIB:AStartup.obj+PowerPelletTask.atom.o TO PowerPelletTask LIBRARY LIB:amiga.lib+LIB:lc.lib FASTER
+delete PowerPelletTask.o
+delete PowerPelletTask.atom.o
+echo "-- Compile complete --"
