@@ -1,0 +1,11 @@
+lc1 -i:include/ -i:include/lattice/ ScoreTask
+if not exists "ScoreTask.q"
+    echo "Compile failed."
+    quit 20
+    endif
+lc2 -v ScoreTask.q
+atom ScoreTask.o ScoreTask.atom.o -pc -cdb
+alink FROM LIB:AStartup.obj+ScoreTask.atom.o TO ScoreTask LIBRARY LIB:amiga.lib+LIB:lc.lib FASTER
+delete ScoreTask.o
+delete ScoreTask.atom.o
+echo "-- Compile complete --"
