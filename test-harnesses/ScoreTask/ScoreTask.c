@@ -431,7 +431,7 @@ main()
 		addMsg->playerno = 1;
 		addMsg->score = "     10";
 		PutMsg(taskPort, addMsg);
-		Delay(4);
+		Delay(2);
 	}
 
 	Delay(100);

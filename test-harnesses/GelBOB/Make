@@ -1,0 +1,11 @@
+lc1 -i:include/ -i:include/lattice/ GELBOB
+if not exists "GELBOB.q"
+    echo "Compile failed."
+    quit 20
+    endif
+lc2 -v GELBOB.q
+atom GELBOB.o GELBOB.atom.o -pc -cdb
+alink FROM LIB:AStartup.obj+GELBOB.atom.o TO GELBOB LIBRARY LIB:amiga.lib+LIB:lc.lib FASTER
+delete GELBOB.o
+delete GELBOB.atom.o
+echo "-- Compile complete --"
