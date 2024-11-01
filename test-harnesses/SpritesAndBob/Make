@@ -1,0 +1,11 @@
+lc1 -i:include/ -i:include/lattice/ SpritesAndBOB
+if not exists "SpritesAndBOB.q"
+    echo "Compile failed."
+    quit 20
+    endif
+lc2 -v SpritesAndBOB.q
+atom SpritesAndBOB.o SpritesAndBOB.atom.o -pc -cdb
+alink FROM LIB:AStartup.obj+SpritesAndBOB.atom.o TO SpritesAndBOB LIBRARY LIB:amiga.lib+LIB:lc.lib FASTER
+delete SpritesAndBOB.o
+delete SpritesAndBOB.atom.o
+echo "-- Compile complete --"
