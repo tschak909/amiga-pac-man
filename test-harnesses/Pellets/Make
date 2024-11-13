@@ -1,0 +1,11 @@
+lc1 -i:include/ -i:include/lattice/ Pellets
+if not exists "Pellets.q"
+    echo "Compile failed."
+    quit 20
+    endif
+lc2 -v Pellets.q
+atom Pellets.o Pellets.atom.o -pc -cdb
+alink FROM LIB:AStartup.obj+Pellets.atom.o TO Pellets LIBRARY LIB:amiga.lib+LIB:lc.lib FASTER
+delete Pellets.o
+delete Pellets.atom.o
+echo "-- Compile complete --"
