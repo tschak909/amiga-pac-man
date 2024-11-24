@@ -773,7 +773,7 @@ int stage;
 
 	/* Clear the stage fruit area */
 	SetAPen(wPacMan->RPort,0);
-	RectFill(wPacMan->RPort,stageX[6],STAGEY,stageX[0]+16,STAGEY+16);
+	RectFill(wPacMan->RPort,stageX[0],STAGEY,stageX[6]+16,STAGEY+16);
 
 	/* Set up pointers to images */
 	switch(stage)
