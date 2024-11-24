@@ -159,10 +159,10 @@ int d;
 		}
 	}
 
-	DrawImage(wPacMan->RPort,img,dot_x[d&0x1F],dot_y[d>>5]);
+	DrawImage(&sPacMan->RastPort,img,dot_x[d&0x1F],dot_y[d>>5]);
 }
 
-dots_plot()
+void dots_plot()
 {
 	int i;
 
@@ -170,6 +170,19 @@ dots_plot()
 	{
 		dot_plot(i);
 	}
+}
+
+void dots_draw()
+{
+	dots_setup();
+	DrawImage(&sPacMan->RastPort,&dots[0],0,0);
+	DeleteTask(0);
+}
+
+void maze_draw()
+{
+	DrawBorder(&sPacMan->RastPort,&boMaze,0,7);
+	DeleteTask(0);
 }
 
 main()
@@ -197,25 +210,21 @@ main()
 
 	LoadRGB4(&sPacMan->ViewPort, colorTable, 16);
 
-	nwPacMan.Screen = sPacMan;
+/*	nwPacMan.Screen = sPacMan;
 	wPacMan = OpenWindow(&nwPacMan);
 	if (!wPacMan)
-		goto bye;
+		goto bye; */
 
-	SetRast(wPacMan->RPort,0);
-
-	dots_setup();
-
-	DrawBorder(wPacMan->RPort,&boMaze,0,7);
-	DrawImage(wPacMan->RPort,&dots[0],0,0);
+	CreateTask("DrawMaze.task",0,maze_draw,1000);
+	CreateTask("DrawDots.task",0,dots_draw,1000);
 
 	Delay(600);
 	
 bye:
 	RemFont(&Arcade8Font);
 
-	if (wPacMan)
-		CloseWindow(wPacMan);
+/*	if (wPacMan)
+		CloseWindow(wPacMan); */
 
 	if (sPacMan)
 		CloseScreen(sPacMan);

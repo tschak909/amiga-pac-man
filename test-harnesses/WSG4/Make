@@ -1,0 +1,11 @@
+lc1 -i:include/ -i:include/lattice/ WSG4
+if not exists "WSG4.q"
+    echo "Compile failed."
+    quit 20
+    endif
+lc2 -v WSG4.q
+atom WSG4.o WSG4.atom.o -pc -cdb
+alink FROM LIB:AStartup.obj+WSG4.atom.o TO WSG4 LIBRARY LIB:amiga.lib+LIB:lc.lib FASTER
+delete WSG4.o
+delete WSG4.atom.o
+echo "-- Compile complete --"

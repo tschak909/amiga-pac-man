@@ -1,0 +1,11 @@
+lc1 -i:include/ -i:include/lattice/ Menu
+if not exists "Menu.q"
+    echo "Compile failed."
+    quit 20
+    endif
+lc2 -v Menu.q
+atom Menu.o Menu.atom.o -pc -cdb
+alink FROM LIB:AStartup.obj+Menu.atom.o TO Menu LIBRARY LIB:amiga.lib+LIB:lc.lib FASTER
+delete Menu.o
+delete Menu.atom.o
+echo "-- Compile complete --"

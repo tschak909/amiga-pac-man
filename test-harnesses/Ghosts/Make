@@ -1,0 +1,11 @@
+lc1 -i:include/ -i:include/lattice/ Ghosts
+if not exists "Ghosts.q"
+    echo "Compile failed."
+    quit 20
+    endif
+lc2 -v Ghosts.q
+atom Ghosts.o Ghosts.atom.o -pc -cdb
+alink FROM LIB:AStartup.obj+Ghosts.atom.o TO Ghosts LIBRARY LIB:amiga.lib+LIB:lc.lib FASTER
+delete Ghosts.o
+delete Ghosts.atom.o
+echo "-- Compile complete --"
